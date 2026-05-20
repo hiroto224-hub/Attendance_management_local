@@ -214,11 +214,10 @@ body {
   padding: 0.55rem 0.95rem;
   border-radius: 10px;
   color: #1f2a44;
-  background: linear-gradient(145deg, #fff7c2 0%, #fde68a 50%, #fcd34d 100%);
   box-shadow:
-    2px 3px 0 rgba(180, 130, 0, 0.35),
+    2px 3px 0 rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    inset 0 -2px 0 rgba(200, 150, 40, 0.25);
+    inset 0 -2px 0 rgba(0, 0, 0, 0.08);
   transition:
     transform 0.08s ease,
     box-shadow 0.15s ease;
@@ -249,6 +248,24 @@ body {
 
 .magnet-name {
   line-height: 1.4;
+}
+
+.magnet--male {
+  color: #1e3a5f;
+  background: linear-gradient(145deg, #dbeafe 0%, #93c5fd 50%, #60a5fa 100%);
+  box-shadow:
+    2px 3px 0 rgba(37, 99, 235, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -2px 0 rgba(37, 99, 235, 0.2);
+}
+
+.magnet--female {
+  color: #7f1d1d;
+  background: linear-gradient(145deg, #fecaca 0%, #f87171 50%, #ef4444 100%);
+  box-shadow:
+    2px 3px 0 rgba(185, 28, 28, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -2px 0 rgba(185, 28, 28, 0.2);
 }
 
 /* 追加ボタン（右下 FAB） */
@@ -368,6 +385,43 @@ body {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.dialog-fieldset {
+  border: none;
+  margin: 0 0 1.1rem;
+  padding: 0;
+}
+
+.dialog-sex-options {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.dialog-sex-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.dialog-sex-option:has(input:checked) {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.dialog-sex-option input {
+  accent-color: #3b82f6;
 }
 
 .dialog-help {

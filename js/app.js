@@ -43,7 +43,8 @@ function parseChild(v) {
     if (!name)
         return undefined;
     const status = normalizeAttendanceStatus(o.status);
-    return { id: o.id, name, status };
+    const sex = o.sex === "female" ? "female" : "male";
+    return { id: o.id, name, status, sex };
 }
 /**
  * 保存済みJSONの状態値を、現在の3分類へ正規化します。
@@ -154,6 +155,8 @@ const btnDelete = must(document.querySelector("#btn-delete-open"), "#btn-delete-
 const dlgBackdrop = must(document.querySelector("#dialog-backdrop"), "#dialog-backdrop");
 const dlgPanel = must(document.querySelector("#dialog-panel"), "#dialog-panel");
 const dlgName = must(document.querySelector("#dialog-name-input"), "#dialog-name-input");
+const dlgSexMale = must(document.querySelector("#dialog-sex-male"), "#dialog-sex-male");
+const dlgSexFemale = must(document.querySelector("#dialog-sex-female"), "#dialog-sex-female");
 const dlgCancel = must(document.querySelector("#btn-dialog-cancel"), "#btn-dialog-cancel");
 const dlgOk = must(document.querySelector("#btn-dialog-ok"), "#btn-dialog-ok");
 const deleteDlgBackdrop = must(document.querySelector("#delete-dialog-backdrop"), "#delete-dialog-backdrop");
@@ -297,7 +300,7 @@ function makeHint(text) {
  */
 function makeMagnet(child) {
     const magnet = document.createElement('div');
-    magnet.className = "magnet";
+    magnet.className = `magnet magnet--${child.sex}`;
     magnet.draggable = true;
     magnet.setAttribute("role", "group");
     magnet.setAttribute("aria-label", `${child.name} のマグネット`);
@@ -402,6 +405,8 @@ function dlgOpen() {
     dlgBackdrop.classList.remove("is-hidden");
     dlgBackdrop.setAttribute("aria-hidden", "false");
     dlgName.value = "";
+    dlgSexMale.checked = true;
+    dlgSexFemale.checked = false;
     dlgName.focus();
 }
 /** 追加ダイアログを閉じます。 */
@@ -450,10 +455,12 @@ function confirmAddChild() {
         dlgClose();
         return false;
     }
+    const sex = dlgSexFemale.checked ? "female" : "male";
     state.children.push({
         id: newChildId(),
         name,
         status: "arrival",
+        sex,
     });
     persist();
     render();

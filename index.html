@@ -77,6 +77,19 @@
           <h2 id="dialog-title" class="dialog-title">児童を追加</h2>
           <label for="dialog-name-input" class="dialog-label">お名前</label>
           <input id="dialog-name-input" class="dialog-input" type="text" placeholder="例）みお" autocomplete="off" />
+          <fieldset class="dialog-fieldset">
+            <legend class="dialog-label">性別</legend>
+            <div class="dialog-sex-options">
+              <label class="dialog-sex-option">
+                <input id="dialog-sex-male" name="dialog-sex" type="radio" value="male" checked />
+                男の子
+              </label>
+              <label class="dialog-sex-option">
+                <input id="dialog-sex-female" name="dialog-sex" type="radio" value="female" />
+                女の子
+              </label>
+            </div>
+          </fieldset>
           <div class="dialog-actions">
             <button type="button" class="btn-secondary" id="btn-dialog-cancel">キャンセル</button>
             <button type="button" class="btn-primary" id="btn-dialog-ok">決定</button>

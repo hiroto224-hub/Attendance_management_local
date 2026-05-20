@@ -6,12 +6,17 @@
 /** 出席ボード上の列（登園 / 降園 / お休み） */
 type AttendanceColumn = "arrival" | "departure" | "holiday";
 
+/** 児童の性別（マグネットの色分けに使用） */
+type ChildSex = "male" | "female";
+
 /** 画面上の児童1人分 */
 interface Child {
   id: string;
   name: string;
   /** マグネットを置いている列 */
   status: AttendanceColumn;
+  /** 性別（男の子: 青 / 女の子: 赤） */
+  sex: ChildSex;
 }
 
 /** localStorage に保存する JSON の形 */
@@ -75,7 +80,8 @@ function parseChild(v: unknown): Child | undefined {
   if (!name) return undefined;
 
   const status = normalizeAttendanceStatus(o.status);
-  return { id: o.id, name, status };
+  const sex: ChildSex = o.sex === "female" ? "female" : "male";
+  return { id: o.id, name, status, sex };
 }
 
 /**
@@ -192,6 +198,8 @@ const btnDelete = must(document.querySelector<HTMLButtonElement>("#btn-delete-op
 const dlgBackdrop = must(document.querySelector<HTMLDivElement>("#dialog-backdrop"), "#dialog-backdrop");
 const dlgPanel = must(document.querySelector<HTMLDivElement>("#dialog-panel"), "#dialog-panel");
 const dlgName = must(document.querySelector<HTMLInputElement>("#dialog-name-input"), "#dialog-name-input");
+const dlgSexMale = must(document.querySelector<HTMLInputElement>("#dialog-sex-male"), "#dialog-sex-male");
+const dlgSexFemale = must(document.querySelector<HTMLInputElement>("#dialog-sex-female"), "#dialog-sex-female");
 const dlgCancel = must(document.querySelector<HTMLButtonElement>("#btn-dialog-cancel"), "#btn-dialog-cancel");
 const dlgOk = must(document.querySelector<HTMLButtonElement>("#btn-dialog-ok"), "#btn-dialog-ok");
 const deleteDlgBackdrop = must(document.querySelector<HTMLDivElement>("#delete-dialog-backdrop"), "#delete-dialog-backdrop");
@@ -346,7 +354,7 @@ function makeHint(text: string): HTMLElement {
  */
 function makeMagnet(child: Child): HTMLElement {
   const magnet = document.createElement('div');
-  magnet.className = "magnet";
+  magnet.className = `magnet magnet--${child.sex}`;
   magnet.draggable = true;
   magnet.setAttribute("role", "group");
   magnet.setAttribute("aria-label", `${child.name} のマグネット`);
@@ -463,6 +471,8 @@ function dlgOpen(): void {
   dlgBackdrop.classList.remove("is-hidden");
   dlgBackdrop.setAttribute("aria-hidden", "false");
   dlgName.value = "";
+  dlgSexMale.checked = true;
+  dlgSexFemale.checked = false;
   dlgName.focus();
 }
 
@@ -519,10 +529,13 @@ function confirmAddChild(): boolean {
     return false;
   }
 
+  const sex: ChildSex = dlgSexFemale.checked ? "female" : "male";
+
   state.children.push({
     id: newChildId(),
     name,
     status: "arrival",
+    sex,
   });
 
   persist();
