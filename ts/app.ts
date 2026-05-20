@@ -68,6 +68,32 @@ function newChildId(): string {
 }
 
 /**
+ * 性別値を正規化します。未保存の旧データは男の子（青）として扱います。
+ * @param value - JSON 内の sex 値
+ */
+function normalizeChildSex(value: unknown): ChildSex {
+  return value === "female" ? "female" : "male";
+}
+
+/**
+ * 保存済み JSON に sex が無い児童が含まれるか判定します。
+ * @param v - パース済み JSON
+ */
+function rosterNeedsSexMigration(v: unknown): boolean {
+  const list: unknown =
+    Array.isArray(v) ? v : v && typeof v === "object" && Array.isArray((v as Record<string, unknown>).children)
+      ? (v as Record<string, unknown>).children
+      : [];
+  if (!Array.isArray(list)) return false;
+
+  return list.some((item) => {
+    if (!item || typeof item !== "object") return false;
+    const sex = (item as Record<string, unknown>).sex;
+    return sex !== "male" && sex !== "female";
+  });
+}
+
+/**
  * 不明な JSON 1件を Child に変換します。不正なら undefined。
  * @param v - localStorage から取り出した1要素
  */
@@ -80,7 +106,7 @@ function parseChild(v: unknown): Child | undefined {
   if (!name) return undefined;
 
   const status = normalizeAttendanceStatus(o.status);
-  const sex: ChildSex = o.sex === "female" ? "female" : "male";
+  const sex = normalizeChildSex(o.sex);
   return { id: o.id, name, status, sex };
 }
 
@@ -158,10 +184,24 @@ function persist(): void {
  * 保存済みデータが無い場合は空のボードとして開始します。
  */
 function loadFromStorage(): void {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  let needsMigration = false;
+  if (raw) {
+    try {
+      needsMigration = rosterNeedsSexMigration(JSON.parse(raw) as unknown);
+    } catch {
+      // loadLocal 側で壊れた JSON を処理します
+    }
+  }
+
   const cached = loadLocal();
   state.children = cached ? clone(cached.children) : [];
   state.className = cached?.className ?? "";
-  if (!cached) saveLocal();
+  if (!cached) {
+    saveLocal();
+  } else if (needsMigration) {
+    persist();
+  }
   syncClassNameInput();
   render();
 }
@@ -354,7 +394,8 @@ function makeHint(text: string): HTMLElement {
  */
 function makeMagnet(child: Child): HTMLElement {
   const magnet = document.createElement('div');
-  magnet.className = `magnet magnet--${child.sex}`;
+  const sex = normalizeChildSex(child.sex);
+  magnet.className = `magnet magnet--${sex}`;
   magnet.draggable = true;
   magnet.setAttribute("role", "group");
   magnet.setAttribute("aria-label", `${child.name} のマグネット`);
