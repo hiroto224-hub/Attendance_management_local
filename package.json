@@ -1,0 +1,13 @@
+{
+  "name": "hoiku-attendance-ui",
+  "private": true,
+  "version": "0.3.0",
+  "description": "園PC向けの静的出席確認ボード（実行に Node は不要。TypeScript を編集するときだけ npm run build）",
+  "scripts": {
+    "build": "tsc --project ts/tsconfig.json",
+    "watch": "tsc --project ts/tsconfig.json --watch"
+  },
+  "devDependencies": {
+    "typescript": "~5.6.2"
+  }
+}

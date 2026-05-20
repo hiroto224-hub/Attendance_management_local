@@ -1,0 +1,416 @@
+/* ========================================
+   全体レイアウト・ベース
+   ======================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  /* 園の Windows PC でよくある日本語フォントのみ（ネット不要・ダウンロードなし） */
+  font-family: system-ui, "Segoe UI", "Yu Gothic UI", "Meiryo", "MS PGothic", sans-serif;
+  background: linear-gradient(160deg, #e8f4fc 0%, #fff5e8 55%, #f0e8ff 100%);
+  color: #2c2c2c;
+}
+
+#root {
+  min-height: 100vh;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  padding-bottom: 6rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  margin-left: 0.35rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
+.status-badge.offline {
+  color: #4a5568;
+  background: #e2e8f0;
+  border: 1px solid #cbd5e1;
+}
+
+/* ========================================
+   ヘッダー
+   ======================================== */
+
+.app-header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.class-name-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.class-name-input {
+  display: block;
+  width: min(100%, 28rem);
+  margin: 0 auto 0.35rem;
+  padding: 0.35rem 0.75rem;
+  font: inherit;
+  font-size: clamp(1.35rem, 4vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #1a2740;
+  background: rgba(255, 255, 255, 0.65);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.class-name-input::placeholder {
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.class-name-input:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.class-name-input:focus {
+  background: #fff;
+  border-color: #7eb8e8;
+}
+
+.app-subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #4a5568;
+}
+
+/* ========================================
+   白板風ボード
+   ======================================== */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.75rem, 3vw, 1.5rem);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 1.75rem);
+  border-radius: 20px;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.85) 0 28px,
+      rgba(247, 250, 255, 0.85) 28px 29px
+    ),
+    linear-gradient(145deg, #fafcff, #eef3fb);
+  box-shadow:
+    0 12px 40px rgba(30, 64, 120, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.65);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+  border-radius: 14px;
+  border: 2px dashed rgba(90, 120, 160, 0.22);
+  background: rgba(255, 255, 255, 0.35);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.column-active {
+  border-color: rgba(56, 132, 255, 0.55);
+  box-shadow: 0 0 0 4px rgba(56, 132, 255, 0.15);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.column-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0.65rem 0.85rem;
+  font-size: 1.05rem;
+  text-align: center;
+  letter-spacing: 0.08em;
+  border-radius: 11px 11px 0 0;
+  color: #fff;
+}
+
+.column-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.8rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  letter-spacing: 0;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.column-arrival .column-heading {
+  background: linear-gradient(135deg, #3d9cff, #1e6feb);
+}
+
+.column-departure .column-heading {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.column-holiday .column-heading {
+  background: linear-gradient(135deg, #ff9a62, #ff6b3d);
+}
+
+.column-body {
+  flex: 1;
+  padding: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 0.55rem;
+}
+
+.column-placeholder {
+  margin: 0;
+  width: 100%;
+  align-self: center;
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(60, 80, 110, 0.45);
+  padding: 2rem 0;
+}
+
+/* マグネット（児童名） */
+
+.magnet {
+  cursor: grab;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.55rem 0.95rem;
+  border-radius: 10px;
+  color: #1f2a44;
+  background: linear-gradient(145deg, #fff7c2 0%, #fde68a 50%, #fcd34d 100%);
+  box-shadow:
+    2px 3px 0 rgba(180, 130, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -2px 0 rgba(200, 150, 40, 0.25);
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.15s ease;
+  touch-action: none;
+  user-select: none;
+}
+
+.magnet:hover {
+  transform: translateY(-1px);
+}
+
+.magnet:active {
+  cursor: grabbing;
+  transform: translateY(1px);
+}
+
+.magnet-touch-source {
+  opacity: 0.45;
+}
+
+.magnet-ghost {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0.92;
+  transform: scale(1.04);
+}
+
+.magnet-name {
+  line-height: 1.4;
+}
+
+/* 追加ボタン（右下 FAB） */
+
+.fab-add {
+  position: fixed;
+  right: clamp(1rem, 4vw, 2rem);
+  bottom: clamp(1rem, 4vw, 2rem);
+  z-index: 40;
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.85rem 1.35rem;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow:
+    0 8px 24px rgba(22, 163, 74, 0.35),
+    0 2px 0 rgba(255, 255, 255, 0.25) inset;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.fab-add:hover {
+  transform: translateY(-2px);
+}
+
+.fab-add:active {
+  transform: translateY(0);
+}
+
+.fab-delete {
+  position: fixed;
+  right: clamp(1rem, 4vw, 2rem);
+  bottom: calc(clamp(1rem, 4vw, 2rem) + 4.2rem);
+  z-index: 40;
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.85rem 1.35rem;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  box-shadow:
+    0 8px 24px rgba(220, 38, 38, 0.35),
+    0 2px 0 rgba(255, 255, 255, 0.25) inset;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.fab-delete:hover {
+  transform: translateY(-2px);
+}
+
+.fab-delete:active {
+  transform: translateY(0);
+}
+
+/* ダイアログ */
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(20, 30, 50, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.dialog-backdrop.is-hidden {
+  display: none;
+}
+
+.dialog {
+  width: min(100%, 380px);
+  padding: 1.35rem 1.25rem 1.15rem;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 20px 50px rgba(15, 30, 60, 0.25);
+}
+
+.dialog-title {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+  color: #1a2740;
+}
+
+.dialog-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin-bottom: 0.35rem;
+}
+
+.dialog-input {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+  margin-bottom: 1.1rem;
+}
+
+.dialog-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.dialog-help {
+  margin: -0.45rem 0 1rem;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.btn-secondary,
+.btn-primary,
+.btn-danger {
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+}
+
+@media (max-width: 520px) {
+  .board {
+    grid-template-columns: 1fr;
+  }
+}

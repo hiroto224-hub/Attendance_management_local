@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>児童 出席確認</title>
+    <!-- フォントは外部サイトへ繋がず、PC に入っているフォントだけを使います -->
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <!-- アプリ本体。TypeScript がこのマークアップへ子要素を組み立てます -->
+    <div id="root">
+      <header class="app-header">
+        <label for="class-name-input" class="class-name-label">クラス名</label>
+        <input
+          id="class-name-input"
+          class="class-name-input"
+          type="text"
+          placeholder="例）ひまわり組"
+          autocomplete="off"
+          aria-label="クラス名"
+        />
+        <p class="app-subtitle">
+          名前をドラッグして「登園」「降園」「お休み」に分けましょう
+          <span class="status-badge offline">このPCに保存</span>
+        </p>
+      </header>
+
+      <main class="board">
+        <!-- 登園列 -->
+        <section class="column column-arrival" id="column-arrival" data-attendance-column="arrival" aria-labelledby="arrival-title">
+          <h2 id="arrival-title" class="column-heading">
+            <span>登園</span>
+            <span class="column-count" id="count-arrival">0人</span>
+          </h2>
+          <div class="column-body" id="body-arrival"></div>
+        </section>
+
+        <!-- 降園列 -->
+        <section class="column column-departure" id="column-departure" data-attendance-column="departure" aria-labelledby="departure-title">
+          <h2 id="departure-title" class="column-heading">
+            <span>降園</span>
+            <span class="column-count" id="count-departure">0人</span>
+          </h2>
+          <div class="column-body" id="body-departure"></div>
+        </section>
+
+        <!-- お休み列 -->
+        <section class="column column-holiday" id="column-holiday" data-attendance-column="holiday" aria-labelledby="holiday-title">
+          <h2 id="holiday-title" class="column-heading">
+            <span>お休み</span>
+            <span class="column-count" id="count-holiday">0人</span>
+          </h2>
+          <div class="column-body" id="body-holiday"></div>
+        </section>
+      </main>
+
+      <!-- 画面右下: 名前を追加 -->
+      <button type="button" class="fab-add" id="btn-add-open" aria-label="児童を追加">
+        追加
+      </button>
+
+      <!-- 画面右下: 名前を入力して児童を削除 -->
+      <button type="button" class="fab-delete" id="btn-delete-open" aria-label="児童を削除">
+        削除
+      </button>
+
+      <!-- 追加ダイアログ（開始時は非表示） -->
+      <div id="dialog-backdrop" class="dialog-backdrop is-hidden" role="presentation" aria-hidden="true">
+        <div
+          id="dialog-panel"
+          class="dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="dialog-title"
+        >
+          <h2 id="dialog-title" class="dialog-title">児童を追加</h2>
+          <label for="dialog-name-input" class="dialog-label">お名前</label>
+          <input id="dialog-name-input" class="dialog-input" type="text" placeholder="例）みお" autocomplete="off" />
+          <div class="dialog-actions">
+            <button type="button" class="btn-secondary" id="btn-dialog-cancel">キャンセル</button>
+            <button type="button" class="btn-primary" id="btn-dialog-ok">決定</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 削除ダイアログ（開始時は非表示） -->
+      <div id="delete-dialog-backdrop" class="dialog-backdrop is-hidden" role="presentation" aria-hidden="true">
+        <div
+          id="delete-dialog-panel"
+          class="dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-dialog-title"
+        >
+          <h2 id="delete-dialog-title" class="dialog-title">児童を削除</h2>
+          <label for="delete-dialog-name-input" class="dialog-label">削除するお名前</label>
+          <input id="delete-dialog-name-input" class="dialog-input" type="text" placeholder="例）みお" autocomplete="off" />
+          <p class="dialog-help">入力した名前と完全に一致する児童を1名削除します。</p>
+          <div class="dialog-actions">
+            <button type="button" class="btn-secondary" id="btn-delete-dialog-cancel">キャンセル</button>
+            <button type="button" class="btn-danger" id="btn-delete-dialog-ok">削除</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- サーバー不要: index.html を開くだけで動きます（データはこのPCのブラウザに保存） -->
+    <script src="js/app.js" defer></script>
+  </body>
+</html>
